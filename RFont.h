@@ -187,6 +187,10 @@ you want to change anything
 typedef size_t RFont_texture;
 #endif
 
+#ifndef RFont_surface
+typedef void* RFont_surface;
+#endif
+
 #ifndef RFONT_MAX_GLYPHS
 #define RFONT_MAX_GLYPHS 256
 #endif
@@ -221,6 +225,7 @@ typedef struct RFont_renderer_proc {
 	void (*render)(void* ctx, const RFont_render_data* data); /* render the text, using the vertices, atlas texture, and texture coords given. */
 	void (*set_framebuffer)(void* ctx, u32 weight, u32 height); /*!< set the frame buffer size (for ortho, for example) */
 	void (*set_color)(void* ctx, float r, float g, float b, float a); /*!< set the current rendering color */
+	void (*set_surface)(void* ctx, RFont_surface surface);
 	void (*freePtr)(void* ctx); /* free any memory the renderer might need to free */
 } RFont_renderer_proc;
 
@@ -242,6 +247,7 @@ RFONT_API RFont_renderer* RFont_renderer_init(RFont_renderer_proc proc);
 RFONT_API void RFont_renderer_initPtr(RFont_renderer_proc proc, void* ptr, RFont_renderer* renderer);
 
 RFONT_API void RFont_renderer_set_framebuffer(RFont_renderer* renderer, u32 w, u32 h);
+RFONT_API void RFont_renderer_set_surface(RFont_renderer* renderer, RFont_surface surface);
 RFONT_API void RFont_renderer_set_color(RFont_renderer* renderer, float r, float g, float b, float a);
 
 RFONT_API void RFont_renderer_free(RFont_renderer* renderer);
@@ -264,7 +270,7 @@ typedef struct RFont_src RFont_src;
 
 struct RFont_font {
 	RFont_src* src; /* source stb font info */
-	float fheight; /* font height from stb */
+	float fheight; /* source font height */
 	float descent; /* font descent */
 	float numOfLongHorMetrics;
 	float space_adv;
@@ -473,17 +479,19 @@ RFONT_API size_t RFont_draw_text_len(RFont_renderer* renderer, RFont_font* font,
 size_t RFont_renderer_size(RFont_renderer* renderer) {
 	size_t size = 0;
 	if (renderer->proc.size)
-		renderer->proc.size();
+		size = renderer->proc.size();
 	return size;
 }
 
 RFont_renderer* RFont_renderer_init(RFont_renderer_proc proc) {
-	RFont_renderer* renderer = (RFont_renderer*)RFONT_MALLOC(sizeof(RFont_renderer));
 	void* ptr = NULL;
-	size_t size = RFont_renderer_size(renderer);
+	size_t size;
 
+	RFont_renderer* renderer = (RFont_renderer*)RFONT_MALLOC(sizeof(RFont_renderer));
+	renderer->proc = proc;
+
+	size = RFont_renderer_size(renderer);
 	if (size) ptr = RFONT_MALLOC(size);
-
 	RFont_renderer_initPtr(proc, ptr, renderer);
 	return renderer;
 }
@@ -498,6 +506,11 @@ void RFont_renderer_initPtr(RFont_renderer_proc proc, void* ptr, RFont_renderer*
 void RFont_renderer_set_framebuffer(RFont_renderer* renderer, u32 w, u32 h) {
 	if (renderer->proc.set_framebuffer)
 		renderer->proc.set_framebuffer(renderer->ctx, w, h);
+}
+
+void RFont_renderer_set_surface(RFont_renderer* renderer, RFont_surface surface) {
+	if (renderer->proc.set_surface)
+		renderer->proc.set_surface(renderer, surface);
 }
 
 void RFont_renderer_set_color(RFont_renderer* renderer, float r, float g, float b, float a) {

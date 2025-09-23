@@ -287,6 +287,7 @@ RFont_renderer_proc RFont_gl_renderer_proc(void) {
 	proc.set_framebuffer = (void (*)(void*, u32, u32))RFont_gl_renderer_set_framebuffer;
 	proc.freePtr = (void (*)(void*))RFont_gl_renderer_freePtr;
 	proc.size = (size_t (*)(void))RFont_gl_renderer_size;
+	proc.set_surface = NULL;
 
 	return proc;
 }

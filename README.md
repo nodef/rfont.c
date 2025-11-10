@@ -2,7 +2,7 @@
 ![logo](logo.png)
 ![image](Screenshot.png)
 
-Simple single header modular library for font rendering and atlas management.\
+Simple single header modular library for font rendering and atlas management, by [Riley Mabb](https://github.com/ColleagueRiley).\
 The library is designed to be lightweight, `RFont.h` itself does not directly handle rendering calls, it passes raw data to the user defined renderer.
 
 `RFont_gl` and `RFont_gl1` serve as examples of user defined renderers.
@@ -20,6 +20,18 @@ Adding `#define RFONT_C89` will use fallbacks for `stdint.h` and `inline`.
 - email : ColleagueRiley@gmail.com
 - discord : ColleagueRiley
 - discord server : https://discord.gg/pXVNgVVbvh
+
+# Installation
+
+Run:
+```bash
+$ npm i rfont.c
+```
+
+And then include `RFont.h` as follows:
+```c
+#include "node_modules/rfont.c/RFont.h"
+```
 
 # Documentation
 For documentation read the `RFont.h` file and check out the example in `./example`
@@ -43,3 +55,10 @@ But you can use an external copy by adding `#define RFONT_EXTERNAL_STB` to your 
 Fontash was used as a reference for some of this code.
 
 However, this library is intended to have better perfromance and be more lightweight than fontstash.
+
+<br>
+<br>
+
+
+[![ORG](https://img.shields.io/badge/org-nodef-green?logo=Org)](https://nodef.github.io)
+![](https://ga-beacon.deno.dev/G-RC63DPBH3P:SH3Eq-NoQ9mwgYeHWxu7cw/github.com/nodef/rfont.c)

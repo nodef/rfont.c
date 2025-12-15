@@ -1,0 +1,22 @@
+{
+  "name": "rfont.c",
+  "version": "1.2025.9",
+  "description": "Simple-to-use single header modular font rendering library written in C; Riley Mabb (2023).",
+  "keywords": [
+    "c",
+    "library",
+    "font",
+    "rendering",
+    "rfont"
+  ],
+  "homepage": "https://github.com/nodef/rfont.c#readme",
+  "bugs": {
+    "url": "https://github.com/nodef/rfont.c/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nodef/rfont.c.git"
+  },
+  "license": "Zlib",
+  "main": "rfont.h"
+}
